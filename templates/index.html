@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <title>Vremenska prognoza</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body id="main-body"
+    {% if weather %}
+        data-weather-main="{{ weather.weather[0].main|lower }}"
+    {% else %}
+        data-weather-main="default"
+    {% endif %}
+>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Promijeni temu">
+        <span id="theme-icon">🌙</span>
+    </button>
+    <button class="bg-toggle" id="bg-toggle" onclick="toggleBg()" title="Dinamična pozadina">
+        <span id="bg-icon">🖼️</span>
+    </button>
+    <div class="container">
+        <!-- Dodano: Dobrodošli tekst iznad naslova -->
+        <div style="text-align:center; font-size:1.2rem; margin-bottom:12px; font-weight:600; color:#007bff;">
+            Dobrodošli na projekat OSiRuO 2025!
+        </div>
+        <h1>Vremenska prognoza</h1>
+        <div id="current-datetime" style="text-align:center; margin-bottom: 20px; font-weight:600;"></div>
+        <form method="post" class="weather-form">
+            <input type="text" name="city" id="city-input" placeholder="Unesite grad" autocomplete="off" required>
+            <div id="city-suggestions" class="suggestions"></div>
+            <button type="submit" class="btn btn-primary">Prikaži</button>
+            <button type="button" id="detect-location" class="btn btn-primary" style="margin-left:10px;" title="Koristi moju lokaciju">
+                <span style="font-size: 18px;">📍</span>
+            </button>
+        </form>
+        <div id="history" style="margin: 20px 0;"></div>
+
+        {% if weather %}
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h2>{{ city }}</h2>
+                    <div class="weather-details">
+                        <div>
+                            <p>🌡️ Temperatura: <strong>{{ weather.main.temp }}°C</strong></p>
+                            <p>🤗 Osjećaj: <strong>{{ weather.main.feels_like }}°C</strong></p>
+                            <p>🔻 Min: <strong>{{ weather.main.temp_min }}°C</strong> | 🔺 Max: <strong>{{ weather.main.temp_max }}°C</strong></p>
+                            <p>💧 Vlažnost: <strong>{{ weather.main.humidity }}%</strong></p>
+                            <p>🧭 Tlak: <strong>{{ weather.main.pressure }} hPa</strong></p>
+                            <p>👁️ Vidljivost: <strong>{{ weather.visibility // 1000 if weather.visibility }} km</strong></p>
+                            <p>☁️ Oblaci: <strong>{{ weather.clouds.all if weather.clouds }}%</strong></p>
+                            <p>💨 Vjetar: <strong>{{ weather.wind.speed }} m/s</strong></p>
+                            <p>🌅 Izlazak sunca: <strong>{{ weather.sunrise }}</strong></p>
+                            <p>🌇 Zalazak sunca: <strong>{{ weather.sunset }}</strong></p>
+                            <p>📍 Koordinate: <strong>{{ weather.coord.lat }}, {{ weather.coord.lon }}</strong></p>
+                        </div>
+                        <div class="weather-icon">
+                            <img class="main-weather-icon" src="http://openweathermap.org/img/wn/{{ weather.weather[0].icon }}@4x.png" alt="weather icon">
+                            <p style="text-transform: capitalize;">{{ weather.weather[0].description }}</p>
+                        </div>
+                    </div>
+                    {% if weather.coord.lat and weather.coord.lon %}
+                        <div id="map"
+                             data-lat="{{ weather.coord.lat }}"
+                             data-lon="{{ weather.coord.lon }}"
+                             data-city="{{ city }}">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if forecast_hourly %}
+            <div class="forecast-section">
+                <h3>Prognoza na svaka 3 sata</h3>
+                <div class="forecast-grid">
+                    {% for item in forecast_hourly %}
+                        <div class="forecast-card">
+                            <div>{{ item.dt_txt[11:16] }}</div>
+                            <img class="weather-forecast-icon" src="http://openweathermap.org/img/wn/{{ item.weather[0].icon }}@2x.png" alt="icon">
+                            <div>{{ item.main.temp|round }}°C</div>
+                            <div style="font-size:12px;">{{ item.weather[0].description }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        {% if forecast_daily %}
+            <div class="forecast-section">
+                <h3>Prognoza po danima</h3>
+                <div class="forecast-grid">
+                    {% for item in forecast_daily %}
+                        <div class="forecast-card">
+                            <div><strong>{{ item.day_name }}</strong> <span style="font-size:12px;">({{ item.dt_txt[:10] }})</span></div>
+                            <img class="weather-forecast-icon" src="http://openweathermap.org/img/wn/{{ item.weather[0].icon }}@2x.png" alt="icon">
+                            <div>{{ item.main.temp|round }}°C</div>
+                            <div style="font-size:12px;">{{ item.weather[0].description }}</div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    <!-- Flash poruke -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-messages">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+    // Tema
+    function toggleTheme() {
+        const body = document.body;
+        body.classList.toggle('light');
+        localStorage.setItem('theme', body.classList.contains('light') ? 'light' : 'dark');
+        updateThemeIcon();
+    }
+    function updateThemeIcon() {
+        const icon = document.getElementById('theme-icon');
+        if (document.body.classList.contains('light')) {
+            icon.textContent = "☀️";
+        } else {
+            icon.textContent = "🌙";
+        }
+    }
+
+    // Samo dinamična pozadina
+    function toggleBg() {
+        const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
+        localStorage.setItem('dynamicBg', useDynamic ? 'false' : 'true');
+        updateBg();
+        updateBgIcon();
+    }
+    function setDynamicBgClass() {
+        const body = document.body;
+        if (localStorage.getItem('dynamicBg') === 'false') return;
+        // Ukloni sve prethodne weather-* klase
+        body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
+
+        // Pronađi podatke o vremenu iz DOM-a (npr. iz data-atributa)
+        let weatherMain = document.getElementById('main-body').getAttribute('data-weather-main');
+        if (!weatherMain) weatherMain = "default";
+        body.classList.add('weather-' + weatherMain.toLowerCase());
+    }
+    function updateBg() {
+        const body = document.body;
+        const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
+        if (!useDynamic) {
+            body.classList.add('no-bg');
+            // Ukloni sve weather-* klase
+            body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
+        } else {
+            body.classList.remove('no-bg');
+            setDynamicBgClass();
+        }
+        // Efekat na dugme
+        const bgBtn = document.getElementById('bg-toggle');
+        if (useDynamic) {
+            bgBtn.classList.add('active');
+        } else {
+            bgBtn.classList.remove('active');
+        }
+    }
+    function updateBgIcon() {
+        const icon = document.getElementById('bg-icon');
+        const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
+        icon.textContent = useDynamic ? "🖼️" : "⬛";
+    }
+    window.onload = () => {
+        if (localStorage.getItem('dynamicBg') === null) {
+            localStorage.setItem('dynamicBg', 'true');
+        }
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.add('light');
+        }
+        updateThemeIcon();
+        updateBg();
+        updateBgIcon();
+    };
+
+    // Prikaz trenutnog datuma i vremena
+    function updateDateTime() {
+        const now = new Date();
+        const dani = ["Nedjelja", "Ponedjeljak", "Utorak", "Srijeda", "Četvrtak", "Petak", "Subota"];
+        const mjeseci = ["januar", "februar", "mart", "april", "maj", "juni", "juli", "august", "septembar", "oktobar", "novembar", "decembar"];
+        const tekst = `${dani[now.getDay()]}, ${now.getDate()}. ${mjeseci[now.getMonth()]} ${now.getFullYear()}. ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        document.getElementById('current-datetime').textContent = tekst;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime();
+
+    // Povijest pretraga
+    const form = document.querySelector('.weather-form');
+    const historyDiv = document.getElementById('history');
+    function renderHistory() {
+        const history = JSON.parse(localStorage.getItem('weatherHistory') || '[]');
+        if (history.length) {
+            historyDiv.innerHTML = '<strong>Povijest pretraga:</strong> ' + history.map((h, i) =>
+                `<span class="history-item" data-city="${h}" style="margin-right:8px; cursor:pointer;">${h}</span>`
+            ).join('');
+            document.querySelectorAll('.history-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    document.querySelector('input[name="city"]').value = this.dataset.city;
+                });
+            });
+        }
+    }
+    if(form) {
+        form.addEventListener('submit', function(e) {
+            const city = form.city.value.trim();
+            if (city) {
+                let history = JSON.parse(localStorage.getItem('weatherHistory') || '[]');
+                history = history.filter(h => h.toLowerCase() !== city.toLowerCase());
+                history.unshift(city);
+                if (history.length > 5) history = history.slice(0,5);
+                localStorage.setItem('weatherHistory', JSON.stringify(history));
+            }
+        });
+    }
+    window.addEventListener('DOMContentLoaded', renderHistory);
+
+    // Automatsko prepoznavanje lokacije
+    document.getElementById('detect-location').onclick = function() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(pos) {
+                fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.address && data.address.city) {
+                            document.querySelector('input[name="city"]').value = data.address.city;
+                        } else if (data.address && data.address.town) {
+                            document.querySelector('input[name="city"]').value = data.address.town;
+                        } else if (data.address && data.address.village) {
+                            document.querySelector('input[name="city"]').value = data.address.village;
+                        } else {
+                            alert('Nije moguće automatski prepoznati grad.');
+                        }
+                    });
+            }, function() {
+                alert('Lokacija nije dopuštena.');
+            });
+        } else {
+            alert('Vaš preglednik ne podržava geolokaciju.');
+        }
+    };
+
+    // Prikaz karte
+    window.addEventListener('DOMContentLoaded', function() {
+        var mapDiv = document.getElementById('map');
+        if (mapDiv) {
+            var lat = parseFloat(mapDiv.getAttribute('data-lat'));
+            var lon = parseFloat(mapDiv.getAttribute('data-lon'));
+            var city = mapDiv.getAttribute('data-city');
+            var map = L.map('map').setView([lat, lon], 11);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19
+            }).addTo(map);
+            L.marker([lat, lon]).addTo(map)
+                .bindPopup(city).openPopup();
+        }
+    });
+
+    const cityInput = document.getElementById('city-input');
+    const suggestionsDiv = document.getElementById('city-suggestions');
+
+    cityInput.addEventListener('input', function() {
+        const value = this.value.trim();
+        if (value.length < 1) {
+            suggestionsDiv.style.display = 'none';
+            return;
+        }
+        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(value)}&limit=7&appid=9c15604876e0870af0a48a7e860e53ce`)
+            .then(res => res.json())
+            .then((data) => {
+                if (!data.length) {
+                    suggestionsDiv.style.display = 'none';
+                    return;
+                }
+                suggestionsDiv.innerHTML = data.map(city =>
+                    `<div class="suggestion-item">${city.name}${city.state ? ', ' + city.state : ''}${city.country ? ', ' + city.country : ''}</div>`
+                ).join('');
+                suggestionsDiv.style.display = 'block';
+            })
+            .catch(() => {
+                suggestionsDiv.style.display = 'none';
+            });
+    });
+
+    suggestionsDiv.addEventListener('click', function(e) {
+        if (e.target.classList.contains('suggestion-item')) {
+            cityInput.value = e.target.textContent.split(',')[0];
+            suggestionsDiv.style.display = 'none';
+        }
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!suggestionsDiv.contains(e.target) && e.target !== cityInput) {
+            suggestionsDiv.style.display = 'none';
+        }
+    });
+    </script>
+</body>
+</html>
