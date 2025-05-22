@@ -425,4 +425,8 @@ h2 {
         height: auto;
         min-width: 0;
     }
+    body.weather-default {
+        background: url('/static/img/mobile.jpg') center center / cover no-repeat fixed !important;
+        background-color: #6ec6f7 !important;
+    }
 }
