@@ -178,20 +178,41 @@
     <script>
     // Tema
     function toggleTheme() {
+        const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         const body = document.body;
-        body.classList.toggle('light');
-        localStorage.setItem('theme', body.classList.contains('light') ? 'light' : 'dark');
+        if (useDynamic) {
+            // Samo mijenjaj klasu za tekst
+            body.classList.toggle('text-light');
+            body.classList.toggle('text-dark');
+            localStorage.setItem('theme', body.classList.contains('text-light') ? 'light' : 'dark');
+        } else {
+            // Klasičan light/dark mode
+            body.classList.toggle('light');
+            localStorage.setItem('theme', body.classList.contains('light') ? 'light' : 'dark');
+        }
         updateThemeIcon();
     }
+
     function updateThemeIcon() {
         const icon = document.getElementById('theme-icon');
         const btn = document.querySelector('.theme-toggle');
-        if (document.body.classList.contains('light')) {
-            icon.textContent = "☀️";
-            btn.classList.add('light');
+        const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
+        if (useDynamic) {
+            if (document.body.classList.contains('text-light')) {
+                icon.textContent = "☀️";
+                btn.classList.add('light');
+            } else {
+                icon.textContent = "🌙";
+                btn.classList.remove('light');
+            }
         } else {
-            icon.textContent = "🌙";
-            btn.classList.remove('light');
+            if (document.body.classList.contains('light')) {
+                icon.textContent = "☀️";
+                btn.classList.add('light');
+            } else {
+                icon.textContent = "🌙";
+                btn.classList.remove('light');
+            }
         }
     }
 
@@ -205,11 +226,14 @@
     function setDynamicBgClass() {
         const body = document.body;
         if (localStorage.getItem('dynamicBg') === 'false') return;
+        // Ukloni sve stare weather klase
         body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
+        // Uzmi vrijednost iz data-weather-main ili default
         let weatherMain = document.getElementById('main-body').getAttribute('data-weather-main');
         if (!weatherMain) weatherMain = "default";
         body.classList.add('weather-' + weatherMain.toLowerCase());
     }
+
     function updateBg() {
         const body = document.body;
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
@@ -238,13 +262,8 @@
         if (localStorage.getItem('dynamicBg') === null) {
             localStorage.setItem('dynamicBg', 'true');
         }
-        const savedTheme = localStorage.getItem('theme');
-        if (savedTheme === 'light') {
-            document.body.classList.add('light');
-        }
-        updateThemeIcon();
         updateBg();
-        updateBgIcon();
+        // ...ostatak inicijalizacije...
     });
 
     // Prikaz trenutnog datuma i vremena

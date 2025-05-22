@@ -501,9 +501,30 @@ body.dark-no-bg .forecast-card {
     color: #222;
 }
 
-/* Kada je light mode, svi elementi imaju bijelu pozadinu i crna slova */
-body.light, 
-body.light * {
+/* Tekst i ikonice za dinamičku pozadinu */
+body.text-light, body.text-light * {
+    color: #111 !important;
+    filter: none !important;
+}
+body.text-dark, body.text-dark * {
+    color: #fff !important;
+    filter: brightness(0) invert(1) !important;
+}
+
+/* Klasičan light/dark mode kad su dinamičke pozadine isključene */
+body.light, body.light * {
+    background: #fff !important;
+    background-color: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+}
+body.dark-no-bg, body.dark-no-bg * {
+    background: #181818 !important;
+    background-color: #181818 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+body.light.dark-no-bg, body.light.dark-no-bg * {
     background: #fff !important;
     background-color: #fff !important;
     color: #111 !important;
