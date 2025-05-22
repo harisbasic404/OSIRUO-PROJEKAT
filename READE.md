@@ -1,10 +1,10 @@
 # Projekat iz Operativnih sistema i računarstva u oblaku  
 **Naziv projekta:** Vremenska prognoza za BiH  
 **Grupa:** (ovdje upiši imena članova grupe)  
-**Cloud platforma:** (ovdje upiši npr. Render, Railway, Oracle Cloud...)  
+**Cloud platforma:** Replit  
 **Domena:** (upiši svoju domenu, npr. osiruo2025.freenom.com)  
-**GitHub repozitorij:** [link do repozitorija]  
-**Link do aplikacije:** [link do aplikacije na cloudu]  
+**GitHub repozitorij:** [https://github.com/harisbasic404/OSIRUO-PROJEKAT](https://github.com/harisbasic404/OSIRUO-PROJEKAT)  
+**Link do aplikacije:** [https://d1b97bcf-a737-4686-a91c-0050b2205c97-00-1aednuj72ahgb.worf.replit.dev/](https://d1b97bcf-a737-4686-a91c-0050b2205c97-00-1aednuj72ahgb.worf.replit.dev/)
 
 ---
 
