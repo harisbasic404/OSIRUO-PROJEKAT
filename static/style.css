@@ -19,24 +19,23 @@ body {
     padding: 0;
     transition: background-color 0.5s, color 0.5s;
     background-color: #181818; /* default dark */
+    /* ...postojeće varijable... */
+    --container-bg-dark: #232323;
+    --container-bg-light: rgba(255,255,255,0.75);
 }
 
 /* DARK MODE (default) */
 body {
-    --bg-main: #181818;
-    --text-color: #fff;
     --card-bg: #232323;
-    --btn-bg: #007bff;
-    --btn-hover: #0056b3;
+    --container-bg-dark: #232323;
+    --text-color: #fff;
 }
 
 /* LIGHT MODE */
 body.light {
-    --bg-main: #fff;
-    --text-color: #222;
     --card-bg: #f5f5f5;
-    --btn-bg: #4CAF50;
-    --btn-hover: #388E3C;
+    --container-bg-light: rgba(255,255,255,0.75);
+    --text-color: #222;
     background-color: #fff !important;
 }
 
@@ -414,6 +413,12 @@ body.light #main-weather-icon {
         margin: 12px;
         padding: 10px;
     }
+    #bih-img-map {
+        max-width: 98vw;
+        width: 98vw;
+        height: auto;
+        min-width: 0;
+    }
 }
 
 @media (max-width: 600px) {
@@ -437,5 +442,18 @@ body.light #main-weather-icon {
     .container {
         margin: 6px;
         padding: 4px;
+    }
+    #bih-img-map {
+        max-width: 99vw;
+        width: 99vw;
+        height: auto;
+        min-width: 0;
+        margin: 12px auto;
+    }
+    #bih-img-map img {
+        border-radius: 10px;
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
 }
