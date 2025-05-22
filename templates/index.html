@@ -102,6 +102,19 @@
             </div>
         {% endif %}
     </div>
+    <div id="bih-img-map" style="position: relative; width: 520px; height: 520px; margin: 30px auto; border-radius: 18px; box-shadow: 0 2px 12px #0001;">
+    <img src="{{ url_for('static', filename='img/bih-3d.png') }}" alt="Mapa BiH" style="width: 100%; height: 100%; border-radius: 18px; display: block;">
+    <!-- Gradovi: precizne pozicije na osnovu slike -->
+    <button onclick="selectCity('Bihać')" class="city-btn" style="left: 9%; top: 13%;">Bihać</button>
+    <button onclick="selectCity('Prijedor')" class="city-btn" style="left: 28%; top: 10%;">Prijedor</button>
+    <button onclick="selectCity('Banja Luka')" class="city-btn" style="left: 38%; top: 18%;">Banja Luka</button>
+    <button onclick="selectCity('Bijeljina')" class="city-btn" style="left: 88%; top: 16%;">Bijeljina</button>
+    <button onclick="selectCity('Tuzla')" class="city-btn" style="left: 77%; top: 28%;">Tuzla</button>
+    <button onclick="selectCity('Brčko')" class="city-btn" style="left: 77%; top: 19%;">Brčko</button>
+    <button onclick="selectCity('Zenica')" class="city-btn" style="left: 58%; top: 38%;">Zenica</button>
+    <button onclick="selectCity('Sarajevo')" class="city-btn" style="left: 68%; top: 48%;">Sarajevo</button>
+    <button onclick="selectCity('Mostar')" class="city-btn" style="left: 53%; top: 65%;">Mostar</button>
+</div>
     <!-- Flash poruke -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
@@ -266,7 +279,47 @@
             L.marker([lat, lon]).addTo(map)
                 .bindPopup(city).openPopup();
         }
+
+        // Veći gradovi BiH sa koordinatama
+        const bihCities = [
+            { name: "Sarajevo", lat: 43.8563, lon: 18.4131 },
+            { name: "Banja Luka", lat: 44.7722, lon: 17.1910 },
+            { name: "Tuzla", lat: 44.5384, lon: 18.6671 },
+            { name: "Mostar", lat: 43.3438, lon: 17.8078 },
+            { name: "Zenica", lat: 44.2031, lon: 17.9076 },
+            { name: "Bijeljina", lat: 44.7558, lon: 19.2144 },
+            { name: "Prijedor", lat: 44.9790, lon: 16.7147 },
+            { name: "Bihać", lat: 44.8169, lon: 15.8709 },
+            { name: "Brčko", lat: 44.8728, lon: 18.8081 }
+        ];
+
+        // Prikaz mape BiH sa gradovima
+        var bihMapDiv = document.getElementById('bih-map');
+        if (bihMapDiv) {
+            var bihMap = L.map('bih-map').setView([44.2, 17.9], 8.1);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 13,
+                minZoom: 7
+            }).addTo(bihMap);
+
+            bihCities.forEach(city => {
+                var marker = L.marker([city.lat, city.lon]).addTo(bihMap)
+                    .bindPopup(`<b style="cursor:pointer; color:#007bff;" onclick="selectCity('${city.name}')">${city.name}</b>`);
+                marker.on('click', function() {
+                    selectCity(city.name);
+                });
+            });
+        }
     });
+
+    // Funkcija za izbor grada sa mape
+    function selectCity(cityName) {
+        const input = document.getElementById('city-input');
+        if (input) {
+            input.value = cityName;
+            input.form && input.form.submit();
+        }
+    }
 
     const cityInput = document.getElementById('city-input');
     const suggestionsDiv = document.getElementById('city-suggestions');

@@ -38,7 +38,7 @@ body {
     border-radius: 15px;
     padding: var(--container-padding);
     box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.17);
-    background-color: rgba(255,255,255,0.55); 
+    background-color: rgba(255,255,255,0.80); 
 }
 
 form input, form select {
@@ -260,8 +260,8 @@ h2 {
 /* Početna pozadina */
 .weather-default {
     background:
-        linear-gradient(rgba(255, 222, 136, 0.35), rgba(255, 186, 115, 0.35)),
-        url('/static/img/default.jpg') center center / cover no-repeat fixed;
+        linear-gradient(rgba(40, 40, 40, 0.12), rgba(40, 40, 40, 0.12)),
+        url('/static/img/pocetna.jpg') center center / cover no-repeat fixed;
 }
 
 /* Sunčano */
@@ -314,6 +314,34 @@ h2 {
     display: block;
 }
 
+#bih-svg-map text {
+    transition: fill 0.2s, font-size 0.2s;
+}
+#bih-svg-map text:hover {
+    fill: #0056b3;
+    font-size: 20px;
+    text-shadow: 0 2px 8px #007bff33;
+}
+
+#bih-img-map {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1/1;
+    margin: 30px auto;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0001;
+    position: relative;
+    background: transparent;
+}
+
+#bih-img-map img {
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    display: block;
+    object-fit: contain;
+}
+
 @media (max-width: 600px) {
     :root {
         --container-padding: 15px;
@@ -342,6 +370,13 @@ h2 {
     .card-body {
         padding: 10px;
     }
+
+    /* Različita default pozadina za mobilne uređaje */
+    .weather-default {
+        background:
+            linear-gradient(rgba(40, 40, 40, 0.14), rgba(40, 40, 40, 0.14)),
+            url('/static/img/mobile.jpg') center center / cover no-repeat fixed;
+    }
 }
 
 body.no-bg {
@@ -361,4 +396,25 @@ body.no-bg .container {
 .bg-toggle:not(.active) {
     opacity: 0.6;
     filter: grayscale(0.5);
+}
+
+.city-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #007bffcc;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 1.1vw;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, transform 0.2s;
+    z-index: 2;
+    white-space: nowrap;
+}
+.city-btn:hover {
+    background: #0056b3;
+    transform: translate(-50%, -50%) scale(1.08);
 }
