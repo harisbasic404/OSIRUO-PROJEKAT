@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap');
 
+/* Osnovne varijable za svijetli (default) izgled */
 :root {
-    --bg-main: rgba(0, 0, 0, 0.13);
-    --text-color: white;
-    --card-bg: rgba(255, 255, 255, 0.18);
+    --bg-main: #fff;
+    --text-color: #111;
+    --card-bg: #fff;
+    --container-bg-light: #fff;
     --btn-bg: #007bff;
     --btn-hover: #0056b3;
     --container-padding: 20px;
@@ -11,17 +13,29 @@
     --btn-gradient-hover: linear-gradient(90deg, #0056b3 60%, #00aaff 100%);
 }
 
+/* Default body stil - svijetlo */
 body {
     font-family: 'Nunito', sans-serif;
     color: var(--text-color);
+    background-color: var(--bg-main) !important;
     min-height: 100vh;
     margin: 0;
     padding: 0;
     transition: background-color 0.5s, color 0.5s;
-    background-color: #181818; /* default dark */
-    /* ...postojeće varijable... */
-    --container-bg-dark: #232323;
-    --container-bg-light: rgba(255,255,255,0.75);
+}
+
+/* Boxovi (container, card, forecast-card) bijeli */
+.container,
+.card,
+.forecast-card {
+    background-color: #fff !important;
+    color: #111 !important;
+}
+
+/* Ako koristiš .card-body ili druge boxove, dodaj i njih po potrebi */
+.card-body {
+    background-color: #fff !important;
+    color: #111 !important;
 }
 
 /* DARK MODE (default) */
