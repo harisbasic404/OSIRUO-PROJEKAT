@@ -185,10 +185,13 @@
     }
     function updateThemeIcon() {
         const icon = document.getElementById('theme-icon');
+        const btn = document.querySelector('.theme-toggle');
         if (document.body.classList.contains('light')) {
             icon.textContent = "☀️";
+            btn.classList.add('light');
         } else {
             icon.textContent = "🌙";
+            btn.classList.remove('light');
         }
     }
 

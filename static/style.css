@@ -485,3 +485,9 @@ body.dark-no-bg .forecast-card {
         font-size: 1.1rem;
     }
 }
+
+/* Dodajte na kraj fajla ili u sekciju za dugmad */
+.theme-toggle.light {
+    background: linear-gradient(90deg, #ffd700 60%, #fffbe7 100%);
+    color: #222;
+}
