@@ -212,9 +212,11 @@
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         if (!useDynamic) {
             body.classList.add('no-bg');
+            body.classList.add('dark-no-bg');
             body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
         } else {
             body.classList.remove('no-bg');
+            body.classList.remove('dark-no-bg');
             setDynamicBgClass();
         }
         const bgBtn = document.getElementById('bg-toggle');

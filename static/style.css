@@ -392,6 +392,25 @@ body.light #main-weather-icon {
     filter: none;
 }
 
+/* Kada je dark mode i dinamičke pozadine su ugašene */
+body.dark-no-bg,
+body.dark-no-bg * {
+    background: #181818 !important;
+    background-color: #181818 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+/* Za container i kartice */
+body.dark-no-bg .container,
+body.dark-no-bg .card,
+body.dark-no-bg .forecast-card {
+    background: #181818 !important;
+    background-color: #181818 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
 @media (max-width: 900px) {
     .forecast-grid {
         flex-wrap: wrap;
@@ -441,13 +460,14 @@ body.light #main-weather-icon {
     .weather-form input[type="text"], 
     .weather-form input, 
     .weather-form select {
-        font-size: 15px;
-        padding: 7px 8px;
+        font-size: 14px;
+        padding: 4px 7px;   /* manji padding za niže polje */
         min-width: 0;
-        width: 100%;
-        max-width: 220px;
+        width: 80vw;
+        max-width: 180px;
         margin: 0 auto;
         box-sizing: border-box;
+        height: 32px;       /* fiksna manja visina */
     }
     .btn-primary, .weather-form button {
         font-size: 15px;
