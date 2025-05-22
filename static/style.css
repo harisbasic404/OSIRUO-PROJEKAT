@@ -342,6 +342,27 @@ h2 {
     object-fit: contain;
 }
 
+.city-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 2;
+}
+.city-btn:hover {
+    background: #0056b3;
+    color: #fff;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
 @media (max-width: 900px) {
     .container {
         max-width: 99vw;
@@ -390,31 +411,18 @@ h2 {
 }
 
 @media (max-width: 600px) {
+    body, html {
+        background-size: cover !important;
+        background-attachment: fixed !important;
+        background-position: center center !important;
+    }
     .container {
         padding: 4px;
         max-width: 100vw;
-    }
-    .card {
-        min-width: 160px;
-        min-height: 160px;
-        padding: 6px 2px;
-        font-size: 0.92rem;
-    }
-    .main-weather-icon {
-        width: 70px;
-        height: 70px;
-    }
-    .weather-forecast-icon {
-        width: 28px;
-        height: 28px;
     }
     #bih-img-map {
         max-width: 98vw;
         height: auto;
         min-width: 0;
-    }
-    .city-btn {
-        font-size: 3.5vw;
-        padding: 1px 4px;
     }
 }
