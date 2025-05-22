@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, jsonify
 import requests
 import os
 from datetime import datetime
@@ -99,6 +99,23 @@ def index():
         forecast_hourly=forecast_hourly,
         forecast_daily=forecast_daily
     )
+
+@app.route("/geo")
+def geo_proxy():
+    q = request.args.get("q", "")
+    if not q:
+        return jsonify([])
+    url = "https://api.openweathermap.org/geo/1.0/direct"
+    params = {
+        "q": q,
+        "limit": 7,
+        "appid": API_KEY
+    }
+    try:
+        r = requests.get(url, params=params, timeout=5)
+        return jsonify(r.json())
+    except Exception:
+        return jsonify([])
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080)

@@ -328,7 +328,7 @@
             suggestionsDiv.style.display = 'none';
             return;
         }
-        fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(value)}&limit=7&appid=9c15604876e0870af0a48a7e860e53ce`)
+        fetch(`/geo?q=${encodeURIComponent(value)}`)
             .then(res => res.json())
             .then((data) => {
                 if (!data.length) {
