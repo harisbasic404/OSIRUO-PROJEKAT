@@ -401,6 +401,15 @@ body.dark-no-bg * {
     box-shadow: none !important;
 }
 
+/* Kada je light mode i dinamičke pozadine su ugašene */
+body.light.dark-no-bg,
+body.light.dark-no-bg * {
+    background: #fff !important;
+    background-color: #fff !important;
+    color: #222 !important;
+    box-shadow: none !important;
+}
+
 /* Za container i kartice */
 body.dark-no-bg .container,
 body.dark-no-bg .card,
