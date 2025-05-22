@@ -140,31 +140,40 @@
         return map[iconCode] || "bi-question-circle";
     }
 
+    // Prebaci podatke iz Jinja2 u JS varijable
+    const weatherData = {{ weather|tojson|safe }};
+    const forecastHourly = {{ forecast_hourly|tojson|safe }};
+    const forecastDaily = {{ forecast_daily|tojson|safe }};
+
     document.addEventListener('DOMContentLoaded', function() {
         // Glavna ikona
-        {% if weather %}
-        var mainIcon = document.getElementById('main-weather-icon');
-        if (mainIcon) {
-            var iconCode = "{{ weather.weather[0].icon }}";
-            mainIcon.className = "bi " + getBootstrapIcon(iconCode);
+        if (weatherData && weatherData.weather && weatherData.weather[0]) {
+            var mainIcon = document.getElementById('main-weather-icon');
+            if (mainIcon) {
+                var iconCode = weatherData.weather[0].icon;
+                mainIcon.className = "bi " + getBootstrapIcon(iconCode);
+            }
         }
-        {% endif %}
 
         // Prognoza po satima
-        {% if forecast_hourly %}
-        {% for item in forecast_hourly %}
-        var el = document.getElementById('forecast-icon-{{ loop.index }}');
-        if (el) el.className = "weather-forecast-icon bi " + getBootstrapIcon("{{ item.weather[0].icon }}");
-        {% endfor %}
-        {% endif %}
+        if (forecastHourly && Array.isArray(forecastHourly)) {
+            forecastHourly.forEach(function(item, idx) {
+                var el = document.getElementById('forecast-icon-' + (idx + 1));
+                if (el && item.weather && item.weather[0]) {
+                    el.className = "weather-forecast-icon bi " + getBootstrapIcon(item.weather[0].icon);
+                }
+            });
+        }
 
         // Prognoza po danima
-        {% if forecast_daily %}
-        {% for item in forecast_daily %}
-        var el = document.getElementById('forecast-icon-day-{{ loop.index }}');
-        if (el) el.className = "weather-forecast-icon bi " + getBootstrapIcon("{{ item.weather[0].icon }}");
-        {% endfor %}
-        {% endif %}
+        if (forecastDaily && Array.isArray(forecastDaily)) {
+            forecastDaily.forEach(function(item, idx) {
+                var el = document.getElementById('forecast-icon-day-' + (idx + 1));
+                if (el && item.weather && item.weather[0]) {
+                    el.className = "weather-forecast-icon bi " + getBootstrapIcon(item.weather[0].icon);
+                }
+            });
+        }
     });
     </script>
     <script>
