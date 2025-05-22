@@ -500,3 +500,12 @@ body.dark-no-bg .forecast-card {
     background: linear-gradient(90deg, #ffd700 60%, #fffbe7 100%);
     color: #222;
 }
+
+/* Kada je light mode, svi elementi imaju bijelu pozadinu i crna slova */
+body.light, 
+body.light * {
+    background: #fff !important;
+    background-color: #fff !important;
+    color: #111 !important;
+    box-shadow: none !important;
+}
