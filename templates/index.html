@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Vremenska prognoza</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Bootstrap Icons CDN -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 <body id="main-body" data-weather-main="{% if weather %}{{ weather.weather[0].main|lower }}{% else %}default{% endif %}">
@@ -176,19 +175,18 @@
     });
     </script>
     <script>
-    // Tema
+    // Tema i pozadina
     function toggleTheme() {
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         const body = document.body;
         if (useDynamic) {
-            // Samo mijenjaj klasu za tekst
             body.classList.toggle('text-light');
             body.classList.toggle('text-dark');
             localStorage.setItem('theme', body.classList.contains('text-light') ? 'light' : 'dark');
         } else {
-            // Klasičan light/dark mode
             body.classList.toggle('light');
-            localStorage.setItem('theme', body.classList.contains('light') ? 'light' : 'dark');
+            body.classList.toggle('dark-no-bg');
+            localStorage.setItem('theme', body.classList.contains('dark-no-bg') ? 'dark' : 'light');
         }
         updateThemeIcon();
     }
@@ -206,29 +204,28 @@
                 btn.classList.remove('light');
             }
         } else {
-            if (document.body.classList.contains('light')) {
-                icon.textContent = "☀️";
-                btn.classList.add('light');
-            } else {
+            if (document.body.classList.contains('dark-no-bg')) {
                 icon.textContent = "🌙";
                 btn.classList.remove('light');
+            } else {
+                icon.textContent = "☀️";
+                btn.classList.add('light');
             }
         }
     }
 
-    // Samo dinamična pozadina
     function toggleBg() {
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         localStorage.setItem('dynamicBg', useDynamic ? 'false' : 'true');
+        applyTheme();
         updateBg();
         updateBgIcon();
     }
+
     function setDynamicBgClass() {
         const body = document.body;
         if (localStorage.getItem('dynamicBg') === 'false') return;
-        // Ukloni sve stare weather klase
         body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
-        // Uzmi vrijednost iz data-weather-main ili default
         let weatherMain = document.getElementById('main-body').getAttribute('data-weather-main');
         if (!weatherMain) weatherMain = "default";
         body.classList.add('weather-' + weatherMain.toLowerCase());
@@ -238,12 +235,8 @@
         const body = document.body;
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         if (!useDynamic) {
-            body.classList.add('no-bg');
-            body.classList.add('dark-no-bg');
             body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
         } else {
-            body.classList.remove('no-bg');
-            body.classList.remove('dark-no-bg');
             setDynamicBgClass();
         }
         const bgBtn = document.getElementById('bg-toggle');
@@ -253,17 +246,41 @@
             bgBtn.classList.remove('active');
         }
     }
+
     function updateBgIcon() {
         const icon = document.getElementById('bg-icon');
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         icon.textContent = useDynamic ? "🖼️" : "⬛";
     }
+
+    function applyTheme() {
+        const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
+        const theme = localStorage.getItem('theme') || 'light';
+        const body = document.body;
+        body.classList.remove('light', 'dark-no-bg', 'text-light', 'text-dark');
+        if (useDynamic) {
+            body.classList.add('text-light');
+        } else {
+            if (theme === 'dark') {
+                body.classList.add('dark-no-bg');
+            } else {
+                body.classList.add('light');
+            }
+        }
+        updateThemeIcon();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.getItem('dynamicBg') === null) {
-            localStorage.setItem('dynamicBg', 'true');
+            localStorage.setItem('dynamicBg', 'false');
         }
+        if (localStorage.getItem('theme') === null) {
+            localStorage.setItem('theme', 'light');
+        }
+        applyTheme();
         updateBg();
-        // ...ostatak inicijalizacije...
+        updateBgIcon();
+        // ...ostala inicijalizacija...
     });
 
     // Prikaz trenutnog datuma i vremena
