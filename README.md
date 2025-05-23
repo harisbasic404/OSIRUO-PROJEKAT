@@ -1,10 +1,10 @@
 # Projekat iz Operativnih sistema i računarstva u oblaku  
 **Naziv projekta:** Vremenska prognoza za BiH  
 **Grupa:** (ovdje upiši imena članova grupe)  
-**Cloud platforma:** Replit  
-**Domena:** (upiši svoju domenu, npr. osiruo2025.freenom.com)  
+**Cloud platforma:** Render  
+**Domena:** (upiši svoju domenu, npr. osiruo2025.freenom.com ili Namecheap domena)  
 **GitHub repozitorij:** [https://github.com/harisbasic404/OSIRUO-PROJEKAT](https://github.com/harisbasic404/OSIRUO-PROJEKAT)  
-**Link do aplikacije:** [https://d1b97bcf-a737-4686-a91c-0050b2205c97-00-1aednuj72ahgb.worf.replit.dev/](https://d1b97bcf-a737-4686-a91c-0050b2205c97-00-1aednuj72ahgb.worf.replit.dev/)
+**Link do aplikacije:** [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
 
 ---
 
@@ -17,9 +17,9 @@ Ovaj projekat je web aplikacija za prikaz vremenske prognoze za gradove u Bosni 
 ## 2. Cloud platforma
 
 **Odabrana platforma:**  
-_(ovdje upiši npr. Render, Railway, Oracle Cloud, DigitalOcean, Replit, ...)_  
+Render  
 **Razlog odabira:**  
-_(upiši zašto ste izabrali baš tu platformu, npr. besplatni tier, jednostavan deploy, ...)_  
+Render nudi besplatan tier za web aplikacije, jednostavan deploy direktno sa GitHub repozitorija, podršku za Docker i lako povezivanje vlastite domene.
 
 ---
 
@@ -66,22 +66,22 @@ bash run_docker.sh
 ## 4. Deploy na cloud
 
 **Opis koraka:**
-1. Napravljen nalog na platformi: _(upiši koju si koristio)_
-2. Povezan GitHub repozitorij sa cloud platformom.
+1. Napravljen nalog na platformi Render.
+2. Povezan GitHub repozitorij sa Render cloud platformom.
 3. Podesio environment varijable (API ključ, SECRET_KEY ako treba).
-4. Deploy aplikacije (auto-deploy ili ručno).
-5. Provjera da aplikacija radi na javnom URL-u.
+4. Deploy aplikacije (auto-deploy na svaki commit).
+5. Provjera da aplikacija radi na javnom URL-u: [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
 
 **Slike ekrana (screenshotovi):**  
-_(ovdje ubaci slike iz deploy panela, logova, i sl.)_
+_(ovdje ubaci slike iz Render deploy panela, logova, i sl.)_
 
 ---
 
 ## 5. Konfiguracija domene
 
 1. Registracija besplatne domene na Freenom/Namecheap:  
-   _(upiši naziv domene)_
-2. Povezivanje domene sa cloud aplikacijom (A-zapis ili CNAME).
+   _(upiši naziv domene)_  
+2. Povezivanje domene sa Render aplikacijom (A-zapis ili CNAME).
 3. Provjera da domena radi.
 
 **Slike ekrana:**  
@@ -115,14 +115,14 @@ _(ovdje ubaci slike iz Freenom/Namecheap panela, DNS podešavanja, i sl.)_
 - **Bootstrap Icons**
 - **OpenWeatherMap API**
 - **HTML/CSS/JS**
-- **Cloud platforma:** _(upiši koju)_
+- **Cloud platforma:** Render
 
 ---
 
 ## 9. Linkovi
 
-- **GitHub repozitorij:** [ovdje link]
-- **Aplikacija na cloudu:** [ovdje link]
+- **GitHub repozitorij:** [https://github.com/harisbasic404/OSIRUO-PROJEKAT](https://github.com/harisbasic404/OSIRUO-PROJEKAT)
+- **Aplikacija na cloudu:** [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
 - **Domena:** [ovdje link]
 
 ---
@@ -154,7 +154,7 @@ _(Ovdje možeš dodati sve što je specifično za vaš projekat, izazove, ideje 
 ## 14. TODO / DOPUNITE
 
 - [ ] Upisati imena članova grupe
-- [ ] Upisati cloud platformu i domenu
+- [ ] Upisati domenu
 - [ ] Ubaciti slike ekrana (deploy, domena, aplikacija)
 - [ ] Dopuniti refleksiju i iskustva
 - [ ] Dodati sve relevantne linkove
