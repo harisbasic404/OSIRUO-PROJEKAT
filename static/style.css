@@ -445,34 +445,10 @@ body.dark-no-bg #main-weather-icon {
     body { padding-top: 24px; }
     .container {
         padding: 12px 2vw;
-        margin: 12px 2vw;
+        margin: 48px 2vw 12px 2vw; /* povećana margina na vrhu */
         border-radius: 14px;
-        margin-top: 24px;
+        margin-top: 48px; /* dodatno osigurava prostor za dugmad */
         margin-bottom: 8px;
-        margin-left: 4px;
-        margin-right: 4px;
-        padding: 6px 2px;
-    }
-    h1 { font-size: 1.2rem; margin-bottom: 18px; }
-    h2 { font-size: 1rem; }
-    .card, .forecast-card {
-        padding: 10px 4px;
-        font-size: 0.95rem;
-        border-radius: 12px;
-    }
-    .weather-form input, .weather-form select {
-        font-size: 13px;
-        padding: 4px 7px;
-    }
-    .btn-primary, .weather-form button {
-        font-size: 14px;
-        padding: 7px 8px;
-    }
-    .weather-form {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 6px;
-        margin-bottom: 14px;
     }
     .weather-form input[type="text"], 
     .weather-form input, 
@@ -486,13 +462,1183 @@ body.dark-no-bg #main-weather-icon {
         box-sizing: border-box;
         height: 32px;
     }
-    .btn-primary, .weather-form button {
-        font-size: 15px;
-        padding: 8px 10px;
-        width: 100%;
-        max-width: 220px;
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+}
+
+/* Dugmad za promjenu teme i pozadine - neka budu izvan containera */
+.theme-toggle, .bg-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1001;
+}
+.bg-toggle { right: 78px; }
+.theme-toggle.light {
+    background: linear-gradient(135deg, #ffd700 60%, #fffbe7 100%);
+    color: #222;
+}
+.theme-toggle:hover, .bg-toggle:hover {
+    background: linear-gradient(135deg, #0056b3 60%, #007bff 100%);
+    box-shadow: 0 6px 24px #007bff44;
+}
+.btn-primary {
+    background: var(--btn-gradient);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-primary:hover {
+    background: var(--btn-gradient-hover);
+    transform: scale(1.07);
+}
+
+/* Forme */
+.weather-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.weather-form input {
+    flex: 1 1 180px;
+    min-width: 0;
+}
+form input, form select {
+    border-radius: 12px;
+    border: none;
+    padding: 12px 18px;
+    font-size: 17px;
+    box-shadow: 0 2px 8px #007bff11;
+    background: #f8faff;
+    transition: box-shadow 0.2s;
+}
+form input:focus, form select:focus {
+    outline: none;
+    box-shadow: 0 4px 16px #007bff33;
+}
+
+/* Sugestije */
+.suggestions {
+    position: absolute;
+    background: #fff;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    z-index: 100;
+    max-height: 180px;
+    overflow-y: auto;
+    width: 250px;
+    left: 0;
+    top: 100%;
+    display: none;
+}
+.suggestion-item {
+    padding: 8px 14px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background: #f0f0f0;
+}
+
+/* Flash poruke */
+.flash-messages {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    width: auto;
+    max-width: 300px;
+    margin: 0;
+    padding: 0;
+}
+.flash-messages .alert {
+    animation: fadeInDown 0.7s;
+}
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+.alert {
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+.alert-success { background-color: #28a745; }
+.alert-error   { background-color: #dc3545; }
+.alert-info    { background-color: #17a2b8; }
+.alert-warning { background-color: #ffc107; }
+
+/* Mapa */
+#bih-svg-map text {
+    transition: fill 0.2s, font-size 0.2s;
+}
+#bih-svg-map text:hover {
+    fill: #0056b3;
+    font-size: 20px;
+    text-shadow: 0 2px 8px #007bff33;
+}
+#bih-img-map {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1/1;
+    margin: 30px auto;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0001;
+    position: relative;
+    background: transparent;
+}
+#bih-img-map img {
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    display: block;
+    object-fit: contain;
+}
+.city-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 2;
+}
+.city-btn:hover {
+    background: #0056b3;
+    color: #fff;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Dinamičke pozadine */
+.weather-default {
+    background:
+        linear-gradient(rgba(40, 40, 40, 0.12), rgba(40, 40, 40, 0.12)),
+        url('/static/img/pocetna.jpg') center center / cover no-repeat fixed;
+}
+.weather-clear {
+    background:
+        linear-gradient(rgba(255, 236, 139, 0.28), rgba(255, 193, 7, 0.28)),
+        url('/static/img/clear.jpg') center center / cover no-repeat fixed;
+}
+.weather-clouds {
+    background:
+        linear-gradient(rgba(189,195,199,0.32), rgba(44,62,80,0.32)),
+        url('/static/img/clouds.jpg') center center / cover no-repeat fixed;
+}
+.weather-rain, .weather-drizzle {
+    background:
+        linear-gradient(rgba(78,84,200,0.28), rgba(143,148,251,0.28)),
+        url('/static/img/rain.jpg') center center / cover no-repeat fixed;
+}
+.weather-snow {
+    background:
+        linear-gradient(rgba(224,234,252,0.32), rgba(207,222,243,0.32)),
+        url('/static/img/snow.jpg') center center / cover no-repeat fixed;
+}
+.weather-mist, .weather-fog, .weather-haze {
+    background:
+        linear-gradient(rgba(117,127,154,0.28), rgba(215,221,232,0.28)),
+        url('/static/img/mist.jpg') center center / cover no-repeat fixed;
+}
+
+/* Ikonice - osnovno: nasljeđuju boju teksta */
+.weather-forecast-icon,
+#main-weather-icon {
+    color: inherit !important;
+    background: transparent !important;
+    filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    transition: color 0.3s;
+}
+
+/* Svijetla tema: tamne ikonice */
+body.light .weather-forecast-icon,
+body.light #main-weather-icon,
+body.text-light .weather-forecast-icon,
+body.text-light #main-weather-icon {
+    color: #222 !important;
+}
+
+/* Tamna tema: bijele ikonice */
+body.text-dark .weather-forecast-icon,
+body.text-dark #main-weather-icon,
+body.dark-no-bg .weather-forecast-icon,
+body.dark-no-bg #main-weather-icon {
+    color: #fff !important;
+}
+
+/* Responsive */
+@media (min-width: 900px) {
+    .container { padding: 48px 40px; }
+}
+@media (max-width: 900px) {
+    .container {
+        padding: 28px 10px;
+        margin: 18px 4vw;
+        max-width: 98vw;
+    }
+    h1 { font-size: 1.7rem; }
+    h2 { font-size: 1.2rem; }
+    .card, .forecast-card {
+        padding: 18px 10px;
+        min-width: 220px;
+        font-size: 1rem;
+    }
+    .forecast-grid {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        overflow-x: visible;
+    }
+    .forecast-card {
+        min-width: 120px;
+        flex: 1 1 120px;
+        margin-bottom: 10px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .container {
+        margin: 12px;
+        padding: 10px;
+    }
+    #bih-img-map {
+        max-width: 98vw;
+        width: 98vw;
+        height: auto;
+        min-width: 0;
+    }
+}
+@media (max-width: 600px) {
+    body { padding-top: 24px; }
+    .container {
+        padding: 12px 2vw;
+        margin: 48px 2vw 12px 2vw; /* povećana margina na vrhu */
+        border-radius: 14px;
+        margin-top: 48px; /* dodatno osigurava prostor za dugmad */
+        margin-bottom: 8px;
+    }
+    .weather-form input[type="text"], 
+    .weather-form input, 
+    .weather-form select {
+        font-size: 14px;
+        padding: 4px 7px;
+        min-width: 0;
+        width: 80vw;
+        max-width: 180px;
         margin: 0 auto;
         box-sizing: border-box;
+        height: 32px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+}
+
+/* Dugmad za promjenu teme i pozadine - neka budu izvan containera */
+.theme-toggle, .bg-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1001;
+}
+.bg-toggle { right: 78px; }
+.theme-toggle.light {
+    background: linear-gradient(135deg, #ffd700 60%, #fffbe7 100%);
+    color: #222;
+}
+.theme-toggle:hover, .bg-toggle:hover {
+    background: linear-gradient(135deg, #0056b3 60%, #007bff 100%);
+    box-shadow: 0 6px 24px #007bff44;
+}
+.btn-primary {
+    background: var(--btn-gradient);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-primary:hover {
+    background: var(--btn-gradient-hover);
+    transform: scale(1.07);
+}
+
+/* Forme */
+.weather-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.weather-form input {
+    flex: 1 1 180px;
+    min-width: 0;
+}
+form input, form select {
+    border-radius: 12px;
+    border: none;
+    padding: 12px 18px;
+    font-size: 17px;
+    box-shadow: 0 2px 8px #007bff11;
+    background: #f8faff;
+    transition: box-shadow 0.2s;
+}
+form input:focus, form select:focus {
+    outline: none;
+    box-shadow: 0 4px 16px #007bff33;
+}
+
+/* Sugestije */
+.suggestions {
+    position: absolute;
+    background: #fff;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    z-index: 100;
+    max-height: 180px;
+    overflow-y: auto;
+    width: 250px;
+    left: 0;
+    top: 100%;
+    display: none;
+}
+.suggestion-item {
+    padding: 8px 14px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background: #f0f0f0;
+}
+
+/* Flash poruke */
+.flash-messages {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    width: auto;
+    max-width: 300px;
+    margin: 0;
+    padding: 0;
+}
+.flash-messages .alert {
+    animation: fadeInDown 0.7s;
+}
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+.alert {
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+.alert-success { background-color: #28a745; }
+.alert-error   { background-color: #dc3545; }
+.alert-info    { background-color: #17a2b8; }
+.alert-warning { background-color: #ffc107; }
+
+/* Mapa */
+#bih-svg-map text {
+    transition: fill 0.2s, font-size 0.2s;
+}
+#bih-svg-map text:hover {
+    fill: #0056b3;
+    font-size: 20px;
+    text-shadow: 0 2px 8px #007bff33;
+}
+#bih-img-map {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1/1;
+    margin: 30px auto;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0001;
+    position: relative;
+    background: transparent;
+}
+#bih-img-map img {
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    display: block;
+    object-fit: contain;
+}
+.city-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 2;
+}
+.city-btn:hover {
+    background: #0056b3;
+    color: #fff;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Dinamičke pozadine */
+.weather-default {
+    background:
+        linear-gradient(rgba(40, 40, 40, 0.12), rgba(40, 40, 40, 0.12)),
+        url('/static/img/pocetna.jpg') center center / cover no-repeat fixed;
+}
+.weather-clear {
+    background:
+        linear-gradient(rgba(255, 236, 139, 0.28), rgba(255, 193, 7, 0.28)),
+        url('/static/img/clear.jpg') center center / cover no-repeat fixed;
+}
+.weather-clouds {
+    background:
+        linear-gradient(rgba(189,195,199,0.32), rgba(44,62,80,0.32)),
+        url('/static/img/clouds.jpg') center center / cover no-repeat fixed;
+}
+.weather-rain, .weather-drizzle {
+    background:
+        linear-gradient(rgba(78,84,200,0.28), rgba(143,148,251,0.28)),
+        url('/static/img/rain.jpg') center center / cover no-repeat fixed;
+}
+.weather-snow {
+    background:
+        linear-gradient(rgba(224,234,252,0.32), rgba(207,222,243,0.32)),
+        url('/static/img/snow.jpg') center center / cover no-repeat fixed;
+}
+.weather-mist, .weather-fog, .weather-haze {
+    background:
+        linear-gradient(rgba(117,127,154,0.28), rgba(215,221,232,0.28)),
+        url('/static/img/mist.jpg') center center / cover no-repeat fixed;
+}
+
+/* Ikonice - osnovno: nasljeđuju boju teksta */
+.weather-forecast-icon,
+#main-weather-icon {
+    color: inherit !important;
+    background: transparent !important;
+    filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    transition: color 0.3s;
+}
+
+/* Svijetla tema: tamne ikonice */
+body.light .weather-forecast-icon,
+body.light #main-weather-icon,
+body.text-light .weather-forecast-icon,
+body.text-light #main-weather-icon {
+    color: #222 !important;
+}
+
+/* Tamna tema: bijele ikonice */
+body.text-dark .weather-forecast-icon,
+body.text-dark #main-weather-icon,
+body.dark-no-bg .weather-forecast-icon,
+body.dark-no-bg #main-weather-icon {
+    color: #fff !important;
+}
+
+/* Responsive */
+@media (min-width: 900px) {
+    .container { padding: 48px 40px; }
+}
+@media (max-width: 900px) {
+    .container {
+        padding: 28px 10px;
+        margin: 18px 4vw;
+        max-width: 98vw;
+    }
+    h1 { font-size: 1.7rem; }
+    h2 { font-size: 1.2rem; }
+    .card, .forecast-card {
+        padding: 18px 10px;
+        min-width: 220px;
+        font-size: 1rem;
+    }
+    .forecast-grid {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        overflow-x: visible;
+    }
+    .forecast-card {
+        min-width: 120px;
+        flex: 1 1 120px;
+        margin-bottom: 10px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .container {
+        margin: 12px;
+        padding: 10px;
+    }
+    #bih-img-map {
+        max-width: 98vw;
+        width: 98vw;
+        height: auto;
+        min-width: 0;
+    }
+}
+@media (max-width: 600px) {
+    body { padding-top: 24px; }
+    .container {
+        padding: 12px 2vw;
+        margin: 48px 2vw 12px 2vw; /* povećana margina na vrhu */
+        border-radius: 14px;
+        margin-top: 48px; /* dodatno osigurava prostor za dugmad */
+        margin-bottom: 8px;
+    }
+    .weather-form input[type="text"], 
+    .weather-form input, 
+    .weather-form select {
+        font-size: 14px;
+        padding: 4px 7px;
+        min-width: 0;
+        width: 80vw;
+        max-width: 180px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        height: 32px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+}
+
+/* Dugmad za promjenu teme i pozadine - neka budu izvan containera */
+.theme-toggle, .bg-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1001;
+}
+.bg-toggle { right: 78px; }
+.theme-toggle.light {
+    background: linear-gradient(135deg, #ffd700 60%, #fffbe7 100%);
+    color: #222;
+}
+.theme-toggle:hover, .bg-toggle:hover {
+    background: linear-gradient(135deg, #0056b3 60%, #007bff 100%);
+    box-shadow: 0 6px 24px #007bff44;
+}
+.btn-primary {
+    background: var(--btn-gradient);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-primary:hover {
+    background: var(--btn-gradient-hover);
+    transform: scale(1.07);
+}
+
+/* Forme */
+.weather-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.weather-form input {
+    flex: 1 1 180px;
+    min-width: 0;
+}
+form input, form select {
+    border-radius: 12px;
+    border: none;
+    padding: 12px 18px;
+    font-size: 17px;
+    box-shadow: 0 2px 8px #007bff11;
+    background: #f8faff;
+    transition: box-shadow 0.2s;
+}
+form input:focus, form select:focus {
+    outline: none;
+    box-shadow: 0 4px 16px #007bff33;
+}
+
+/* Sugestije */
+.suggestions {
+    position: absolute;
+    background: #fff;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    z-index: 100;
+    max-height: 180px;
+    overflow-y: auto;
+    width: 250px;
+    left: 0;
+    top: 100%;
+    display: none;
+}
+.suggestion-item {
+    padding: 8px 14px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background: #f0f0f0;
+}
+
+/* Flash poruke */
+.flash-messages {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    width: auto;
+    max-width: 300px;
+    margin: 0;
+    padding: 0;
+}
+.flash-messages .alert {
+    animation: fadeInDown 0.7s;
+}
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+.alert {
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+.alert-success { background-color: #28a745; }
+.alert-error   { background-color: #dc3545; }
+.alert-info    { background-color: #17a2b8; }
+.alert-warning { background-color: #ffc107; }
+
+/* Mapa */
+#bih-svg-map text {
+    transition: fill 0.2s, font-size 0.2s;
+}
+#bih-svg-map text:hover {
+    fill: #0056b3;
+    font-size: 20px;
+    text-shadow: 0 2px 8px #007bff33;
+}
+#bih-img-map {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1/1;
+    margin: 30px auto;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0001;
+    position: relative;
+    background: transparent;
+}
+#bih-img-map img {
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    display: block;
+    object-fit: contain;
+}
+.city-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 2;
+}
+.city-btn:hover {
+    background: #0056b3;
+    color: #fff;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Dinamičke pozadine */
+.weather-default {
+    background:
+        linear-gradient(rgba(40, 40, 40, 0.12), rgba(40, 40, 40, 0.12)),
+        url('/static/img/pocetna.jpg') center center / cover no-repeat fixed;
+}
+.weather-clear {
+    background:
+        linear-gradient(rgba(255, 236, 139, 0.28), rgba(255, 193, 7, 0.28)),
+        url('/static/img/clear.jpg') center center / cover no-repeat fixed;
+}
+.weather-clouds {
+    background:
+        linear-gradient(rgba(189,195,199,0.32), rgba(44,62,80,0.32)),
+        url('/static/img/clouds.jpg') center center / cover no-repeat fixed;
+}
+.weather-rain, .weather-drizzle {
+    background:
+        linear-gradient(rgba(78,84,200,0.28), rgba(143,148,251,0.28)),
+        url('/static/img/rain.jpg') center center / cover no-repeat fixed;
+}
+.weather-snow {
+    background:
+        linear-gradient(rgba(224,234,252,0.32), rgba(207,222,243,0.32)),
+        url('/static/img/snow.jpg') center center / cover no-repeat fixed;
+}
+.weather-mist, .weather-fog, .weather-haze {
+    background:
+        linear-gradient(rgba(117,127,154,0.28), rgba(215,221,232,0.28)),
+        url('/static/img/mist.jpg') center center / cover no-repeat fixed;
+}
+
+/* Ikonice - osnovno: nasljeđuju boju teksta */
+.weather-forecast-icon,
+#main-weather-icon {
+    color: inherit !important;
+    background: transparent !important;
+    filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    transition: color 0.3s;
+}
+
+/* Svijetla tema: tamne ikonice */
+body.light .weather-forecast-icon,
+body.light #main-weather-icon,
+body.text-light .weather-forecast-icon,
+body.text-light #main-weather-icon {
+    color: #222 !important;
+}
+
+/* Tamna tema: bijele ikonice */
+body.text-dark .weather-forecast-icon,
+body.text-dark #main-weather-icon,
+body.dark-no-bg .weather-forecast-icon,
+body.dark-no-bg #main-weather-icon {
+    color: #fff !important;
+}
+
+/* Responsive */
+@media (min-width: 900px) {
+    .container { padding: 48px 40px; }
+}
+@media (max-width: 900px) {
+    .container {
+        padding: 28px 10px;
+        margin: 18px 4vw;
+        max-width: 98vw;
+    }
+    h1 { font-size: 1.7rem; }
+    h2 { font-size: 1.2rem; }
+    .card, .forecast-card {
+        padding: 18px 10px;
+        min-width: 220px;
+        font-size: 1rem;
+    }
+    .forecast-grid {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        overflow-x: visible;
+    }
+    .forecast-card {
+        min-width: 120px;
+        flex: 1 1 120px;
+        margin-bottom: 10px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .container {
+        margin: 12px;
+        padding: 10px;
+    }
+    #bih-img-map {
+        max-width: 98vw;
+        width: 98vw;
+        height: auto;
+        min-width: 0;
+    }
+}
+@media (max-width: 600px) {
+    body { padding-top: 24px; }
+    .container {
+        padding: 12px 2vw;
+        margin: 48px 2vw 12px 2vw; /* povećana margina na vrhu */
+        border-radius: 14px;
+        margin-top: 48px; /* dodatno osigurava prostor za dugmad */
+        margin-bottom: 8px;
+    }
+    .weather-form input[type="text"], 
+    .weather-form input, 
+    .weather-form select {
+        font-size: 14px;
+        padding: 4px 7px;
+        min-width: 0;
+        width: 80vw;
+        max-width: 180px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        height: 32px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+}
+
+/* Dugmad za promjenu teme i pozadine - neka budu izvan containera */
+.theme-toggle, .bg-toggle {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    z-index: 1001;
+}
+.bg-toggle { right: 78px; }
+.theme-toggle.light {
+    background: linear-gradient(135deg, #ffd700 60%, #fffbe7 100%);
+    color: #222;
+}
+.theme-toggle:hover, .bg-toggle:hover {
+    background: linear-gradient(135deg, #0056b3 60%, #007bff 100%);
+    box-shadow: 0 6px 24px #007bff44;
+}
+.btn-primary {
+    background: var(--btn-gradient);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-size: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: background 0.3s, transform 0.2s;
+}
+.btn-primary:hover {
+    background: var(--btn-gradient-hover);
+    transform: scale(1.07);
+}
+
+/* Forme */
+.weather-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 20px;
+    position: relative;
+}
+.weather-form input {
+    flex: 1 1 180px;
+    min-width: 0;
+}
+form input, form select {
+    border-radius: 12px;
+    border: none;
+    padding: 12px 18px;
+    font-size: 17px;
+    box-shadow: 0 2px 8px #007bff11;
+    background: #f8faff;
+    transition: box-shadow 0.2s;
+}
+form input:focus, form select:focus {
+    outline: none;
+    box-shadow: 0 4px 16px #007bff33;
+}
+
+/* Sugestije */
+.suggestions {
+    position: absolute;
+    background: #fff;
+    color: #222;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    z-index: 100;
+    max-height: 180px;
+    overflow-y: auto;
+    width: 250px;
+    left: 0;
+    top: 100%;
+    display: none;
+}
+.suggestion-item {
+    padding: 8px 14px;
+    cursor: pointer;
+}
+.suggestion-item:hover {
+    background: #f0f0f0;
+}
+
+/* Flash poruke */
+.flash-messages {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+    width: auto;
+    max-width: 300px;
+    margin: 0;
+    padding: 0;
+}
+.flash-messages .alert {
+    animation: fadeInDown 0.7s;
+}
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px);}
+    to { opacity: 1; transform: translateY(0);}
+}
+.alert {
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    color: #fff;
+    font-size: 14px;
+}
+.alert-success { background-color: #28a745; }
+.alert-error   { background-color: #dc3545; }
+.alert-info    { background-color: #17a2b8; }
+.alert-warning { background-color: #ffc107; }
+
+/* Mapa */
+#bih-svg-map text {
+    transition: fill 0.2s, font-size 0.2s;
+}
+#bih-svg-map text:hover {
+    fill: #0056b3;
+    font-size: 20px;
+    text-shadow: 0 2px 8px #007bff33;
+}
+#bih-img-map {
+    width: 100%;
+    max-width: 520px;
+    aspect-ratio: 1/1;
+    margin: 30px auto;
+    border-radius: 18px;
+    box-shadow: 0 2px 12px #0001;
+    position: relative;
+    background: transparent;
+}
+#bih-img-map img {
+    width: 100%;
+    height: 100%;
+    border-radius: 18px;
+    display: block;
+    object-fit: contain;
+}
+.city-btn {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    background: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px #0002;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    z-index: 2;
+}
+.city-btn:hover {
+    background: #0056b3;
+    color: #fff;
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* Dinamičke pozadine */
+.weather-default {
+    background:
+        linear-gradient(rgba(40, 40, 40, 0.12), rgba(40, 40, 40, 0.12)),
+        url('/static/img/pocetna.jpg') center center / cover no-repeat fixed;
+}
+.weather-clear {
+    background:
+        linear-gradient(rgba(255, 236, 139, 0.28), rgba(255, 193, 7, 0.28)),
+        url('/static/img/clear.jpg') center center / cover no-repeat fixed;
+}
+.weather-clouds {
+    background:
+        linear-gradient(rgba(189,195,199,0.32), rgba(44,62,80,0.32)),
+        url('/static/img/clouds.jpg') center center / cover no-repeat fixed;
+}
+.weather-rain, .weather-drizzle {
+    background:
+        linear-gradient(rgba(78,84,200,0.28), rgba(143,148,251,0.28)),
+        url('/static/img/rain.jpg') center center / cover no-repeat fixed;
+}
+.weather-snow {
+    background:
+        linear-gradient(rgba(224,234,252,0.32), rgba(207,222,243,0.32)),
+        url('/static/img/snow.jpg') center center / cover no-repeat fixed;
+}
+.weather-mist, .weather-fog, .weather-haze {
+    background:
+        linear-gradient(rgba(117,127,154,0.28), rgba(215,221,232,0.28)),
+        url('/static/img/mist.jpg') center center / cover no-repeat fixed;
+}
+
+/* Ikonice - osnovno: nasljeđuju boju teksta */
+.weather-forecast-icon,
+#main-weather-icon {
+    color: inherit !important;
+    background: transparent !important;
+    filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    transition: color 0.3s;
+}
+
+/* Svijetla tema: tamne ikonice */
+body.light .weather-forecast-icon,
+body.light #main-weather-icon,
+body.text-light .weather-forecast-icon,
+body.text-light #main-weather-icon {
+    color: #222 !important;
+}
+
+/* Tamna tema: bijele ikonice */
+body.text-dark .weather-forecast-icon,
+body.text-dark #main-weather-icon,
+body.dark-no-bg .weather-forecast-icon,
+body.dark-no-bg #main-weather-icon {
+    color: #fff !important;
+}
+
+/* Responsive */
+@media (min-width: 900px) {
+    .container { padding: 48px 40px; }
+}
+@media (max-width: 900px) {
+    .container {
+        padding: 28px 10px;
+        margin: 18px 4vw;
+        max-width: 98vw;
+    }
+    h1 { font-size: 1.7rem; }
+    h2 { font-size: 1.2rem; }
+    .card, .forecast-card {
+        padding: 18px 10px;
+        min-width: 220px;
+        font-size: 1rem;
+    }
+    .forecast-grid {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        overflow-x: visible;
+    }
+    .forecast-card {
+        min-width: 120px;
+        flex: 1 1 120px;
+        margin-bottom: 10px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+    .container {
+        margin: 12px;
+        padding: 10px;
+    }
+    #bih-img-map {
+        max-width: 98vw;
+        width: 98vw;
+        height: auto;
+        min-width: 0;
+    }
+}
+@media (max-width: 600px) {
+    body { padding-top: 24px; }
+    .container {
+        padding: 12px 2vw;
+        margin: 48px 2vw 12px 2vw; /* povećana margina na vrhu */
+        border-radius: 14px;
+        margin-top: 48px; /* dodatno osigurava prostor za dugmad */
+        margin-bottom: 8px;
+    }
+    .weather-form input[type="text"], 
+    .weather-form input, 
+    .weather-form select {
+        font-size: 14px;
+        padding: 4px 7px;
+        min-width: 0;
+        width: 80vw;
+        max-width: 180px;
+        margin: 0 auto;
+        box-sizing: border-box;
+        height: 32px;
+    }
+    .weather-form {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+        margin-bottom: 14px;
     }
 }
 
