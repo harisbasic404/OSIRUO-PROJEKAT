@@ -48,7 +48,8 @@
                             <p>📍 Koordinate: <strong>{{ weather.coord.lat }}, {{ weather.coord.lon }}</strong></p>
                         </div>
                         <div class="weather-icon">
-                            <i id="main-weather-icon" class="bi" style="font-size: 3rem;"></i>
+                            <!-- Dodaj default ikonu za fallback -->
+                            <i id="main-weather-icon" class="weather-forecast-icon bi bi-question-circle" style="font-size: 3rem;"></i>
                             <p style="text-transform: capitalize;">{{ weather.weather[0].description }}</p>
                         </div>
                     </div>
@@ -63,7 +64,8 @@
                     {% for item in forecast_hourly %}
                         <div class="forecast-card">
                             <div>{{ item.dt_txt[11:16] }}</div>
-                            <i class="weather-forecast-icon bi" id="forecast-icon-{{ loop.index }}" style="font-size:2rem;"></i>
+                            <!-- Dodaj default ikonu za fallback -->
+                            <i class="weather-forecast-icon bi bi-question-circle" id="forecast-icon-{{ loop.index }}" style="font-size:2rem;"></i>
                             <div>{{ item.main.temp|round }}°C</div>
                             <div style="font-size:12px;">{{ item.weather[0].description }}</div>
                         </div>
@@ -79,7 +81,8 @@
                     {% for item in forecast_daily %}
                         <div class="forecast-card">
                             <div><strong>{{ item.day_name }}</strong> <span style="font-size:12px;">({{ item.dt_txt[:10] }})</span></div>
-                            <i class="weather-forecast-icon bi" id="forecast-icon-day-{{ loop.index }}" style="font-size:2rem;"></i>
+                            <!-- Dodaj default ikonu za fallback -->
+                            <i class="weather-forecast-icon bi bi-question-circle" id="forecast-icon-day-{{ loop.index }}" style="font-size:2rem;"></i>
                             <div>{{ item.main.temp|round }}°C</div>
                             <div style="font-size:12px;">{{ item.weather[0].description }}</div>
                         </div>
@@ -149,7 +152,7 @@
             var mainIcon = document.getElementById('main-weather-icon');
             if (mainIcon) {
                 var iconCode = weatherData.weather[0].icon;
-                mainIcon.className = "bi " + getBootstrapIcon(iconCode);
+                mainIcon.className = "weather-forecast-icon bi " + getBootstrapIcon(iconCode);
             }
         }
 
@@ -398,5 +401,19 @@
         }
     });
     </script>
+    <style>
+    body.text-dark .weather-forecast-icon,
+    body.text-dark #main-weather-icon,
+    body.dark-no-bg .weather-forecast-icon,
+    body.dark-no-bg #main-weather-icon {
+        color: #fff !important;
+        background: transparent !important;
+        filter: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+    }
+    </style>
 </body>
 </html>

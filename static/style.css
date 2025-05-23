@@ -368,28 +368,33 @@ form input:focus, form select:focus {
         url('/static/img/mist.jpg') center center / cover no-repeat fixed;
 }
 
-/* Ikonice */
+/* Ikonice - osnovno: nasljeđuju boju teksta */
 .weather-forecast-icon,
 #main-weather-icon {
-    filter: brightness(0) invert(1);
-    transition: filter 0.3s;
-    background: none;
+    color: inherit !important;
+    background: transparent !important;
+    filter: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    padding: 0 !important;
+    transition: color 0.3s;
 }
+
+/* Svijetla tema: tamne ikonice */
 body.light .weather-forecast-icon,
 body.light #main-weather-icon,
 body.text-light .weather-forecast-icon,
 body.text-light #main-weather-icon {
-    filter: none !important;
-    background: none !important;
+    color: #222 !important;
 }
+
+/* Tamna tema: bijele ikonice */
+body.text-dark .weather-forecast-icon,
+body.text-dark #main-weather-icon,
 body.dark-no-bg .weather-forecast-icon,
 body.dark-no-bg #main-weather-icon {
-    filter: brightness(0) invert(1) !important;
-    background: #232323 !important;
-    border-radius: 50%;
-    padding: 8px;
-    box-shadow: 0 2px 8px #0006;
-    border: 2px solid #444;
+    color: #fff !important;
 }
 
 /* Responsive */
