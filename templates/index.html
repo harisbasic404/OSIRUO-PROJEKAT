@@ -272,7 +272,7 @@
 
     document.addEventListener('DOMContentLoaded', function() {
         if (localStorage.getItem('dynamicBg') === null) {
-            localStorage.setItem('dynamicBg', 'false');
+            localStorage.setItem('dynamicBg', 'true'); // <-- promijeni na 'true'
         }
         if (localStorage.getItem('theme') === null) {
             localStorage.setItem('theme', 'light');
