@@ -1,10 +1,11 @@
 # Projekat iz Operativnih sistema i računarstva u oblaku  
 **Naziv projekta:** Vremenska prognoza za BiH  
-**Grupa:** (ovdje upiši imena članova grupe)  
+**Grupa:** Jašarević Adnan, Bektaš Kenan, Čamdžić Hamza , Bašić Haris  
 **Cloud platforma:** Render  
-**Domena:** (upiši svoju domenu, npr. osiruo2025.freenom.com ili Namecheap domena)  
+**Domena:** prognozaza.me  
 **GitHub repozitorij:** [https://github.com/harisbasic404/OSIRUO-PROJEKAT](https://github.com/harisbasic404/OSIRUO-PROJEKAT)  
-**Link do aplikacije:** [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
+**Link do aplikacije:** [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)  
+**Domena:** [https://prognozaza.me](https://prognozaza.me)
 
 ---
 
@@ -63,31 +64,55 @@ bash run_docker.sh
 
 ---
 
-## 4. Deploy na cloud
+## 4. Deploy na cloud – korak po korak
 
-**Opis koraka:**
-1. Napravljen nalog na platformi Render.
-2. Povezan GitHub repozitorij sa Render cloud platformom.
-3. Podesio environment varijable (API ključ, SECRET_KEY ako treba).
-4. Deploy aplikacije (auto-deploy na svaki commit).
-5. Provjera da aplikacija radi na javnom URL-u: [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
+1. **Registracija na Render**  
+   Napravljen nalog na platformi Render.
 
-**Slike ekrana (screenshotovi):**  
-_(ovdje ubaci slike iz Render deploy panela, logova, i sl.)_
+   ![Registracija na Render](img/renderlogin.png)
+
+2. **Povezivanje GitHub repozitorija**  
+   Povezan GitHub repozitorij sa Render cloud platformom.
+
+   ![Povezivanje repozitorija](img/gitlink.png)
+
+3. **Konfiguracija servisa**  
+   Izabrana opcija za Docker deploy, unesen naziv servisa, branch i region.
+
+   ![Konfiguracija servisa](img/postavke.png)
+
+4. **Podesio environment varijable**  
+   Dodan API ključ za OpenWeatherMap kao environment variable.
+
+   ![Environment varijable](img/apykeyy.png)
+
+5. **Deploy aplikacije**  
+   Deploy aplikacije (auto-deploy na svaki commit).
+
+   ![Deploy proces](img/deployanje.png)
+
+6. **Provjera aplikacije na javnom URL-u**  
+   Provjera da aplikacija radi na javnom URL-u:  
+   [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
+
+   ![Aplikacija live](img/pokrenutaaplikacija.png)
 
 ---
 
 ## 5. Konfiguracija domene
 
-1. Registracija besplatne domene na Freenom/Namecheap:  
-   _(upiši naziv domene)_  
-2. Povezivanje domene sa Render aplikacijom (A-zapis ili CNAME).
-3. Provjera da domena radi.
+1. **Registracija domene**  
+   Registrirana domena: **prognozaza.me**
 
-**Slike ekrana:**  
-_(ovdje ubaci slike iz Freenom/Namecheap panela, DNS podešavanja, i sl.)_
+   ![Custom domena](img/domena.jpg)
+
+2. **Povezivanje domene sa Render aplikacijom**  
+   Dodan CNAME/A zapis prema Render aplikaciji.
+
+   ![Custom domena](img/customdomena.jpg)
 
 ---
+
 
 ## 6. Automatizacija (bash skripta)
 
@@ -101,9 +126,11 @@ _(ovdje ubaci slike iz Freenom/Namecheap panela, DNS podešavanja, i sl.)_
 - `docker build -t osiruo-projekat .`
 - `docker run -p 5000:5000 osiruo-projekat`
 - `bash run_docker.sh`
-- `git clone ...`
+- `git clone https://github.com/harisbasic404/OSIRUO-PROJEKAT.git`
 - `pip install -r requirements.txt`
-- _(dodaj još komandi koje ste koristili, npr. za cloud, SSH, scp, ...)_  
+- `ssh` (za pristup serverima po potrebi)
+- `scp` (za kopiranje fajlova po potrebi)
+- Render cloud panel za deploy i monitoring
 
 ---
 
@@ -123,41 +150,43 @@ _(ovdje ubaci slike iz Freenom/Namecheap panela, DNS podešavanja, i sl.)_
 
 - **GitHub repozitorij:** [https://github.com/harisbasic404/OSIRUO-PROJEKAT](https://github.com/harisbasic404/OSIRUO-PROJEKAT)
 - **Aplikacija na cloudu:** [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
-- **Domena:** [ovdje link]
+- **Domena:** [https://prognozaza.me](https://prognozaza.me)
 
 ---
 
-## 10. Potrebni kredencijali za prijavu
+## 10. Kratka refleksija: šta ste naučili
 
-_(Nije potrebno za ovu aplikaciju, ali ostavi prostor ako bude potrebno)_
-
----
-
-## 11. Kratka refleksija: šta ste naučili
-
-_(Ovdje napiši šta ste naučili kroz rad na projektu: rad sa Dockerom, cloud deploy, rad u timu, rad sa API-jem, automatizacija, ...)_  
-
----
-
-## 12. Slike ekrana aplikacije
-
-_(Ubaci slike početne stranice, pretrage, mape, mobilnog prikaza, ...)_  
+Kroz rad na ovom projektu naučili smo:
+- Kako dockerizirati Python/Flask aplikaciju i koristiti Docker za razvoj i deploy.
+- Kako koristiti cloud platformu Render za automatski deploy aplikacije direktno sa GitHub-a.
+- Kako postaviti environment varijable i raditi sa API ključevima na cloudu.
+- Kako povezati vlastitu domenu i podesiti SSL certifikat.
+- Automatizaciju procesa pokretanja aplikacije putem bash skripte.
+- Timsku saradnju kroz GitHub i podjelu zadataka.
+- Praktičnu upotrebu OpenWeatherMap API-ja i rad sa vanjskim servisima.
 
 ---
 
-## 13. Dodatne napomene
+## 11. Slike ekrana aplikacije 
 
-_(Ovdje možeš dodati sve što je specifično za vaš projekat, izazove, ideje za poboljšanje, ...)_  
+- **Početna:**  
+  ![Slika aplikacije](img/pocetna.png)
+
+- **Prikaz vremena:**  
+  ![Slika aplikacije](img/vrijeme.png)
+
+- **Dark mode:**  
+  ![Slika aplikacije](img/darkmode.png)
+
+- **Light mode:**  
+  ![Slika aplikacije](img/lightmode.png)
 
 ---
 
-## 14. TODO / DOPUNITE
+## 12. Dodatne napomene
 
-- [ ] Upisati imena članova grupe
-- [ ] Upisati domenu
-- [ ] Ubaciti slike ekrana (deploy, domena, aplikacija)
-- [ ] Dopuniti refleksiju i iskustva
-- [ ] Dodati sve relevantne linkove
+- Projekat je moguće proširiti dodavanjem više funkcionalnosti (npr. prikaz vremenske prognoze na mapi, višejezičnost, itd).
+- Svi koraci su dokumentovani i mogu se ponoviti za slične projekte.
 
 ---
 
