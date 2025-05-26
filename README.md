@@ -69,33 +69,33 @@ bash run_docker.sh
 1. **Registracija na Render**  
    Napravljen nalog na platformi Render.
 
-   ![Registracija na Render](img/renderlogin.png)
+   ![Registracija na Render](static/img/renderlogin.png)
 
 2. **Povezivanje GitHub repozitorija**  
    Povezan GitHub repozitorij sa Render cloud platformom.
 
-   ![Povezivanje repozitorija](img/gitlink.png)
+   ![Povezivanje repozitorija](static/img/gitlink.png)
 
 3. **Konfiguracija servisa**  
    Izabrana opcija za Docker deploy, unesen naziv servisa, branch i region.
 
-   ![Konfiguracija servisa](img/postavke.png)
+   ![Konfiguracija servisa](static/img/postavke.png)
 
 4. **Podesio environment varijable**  
    Dodan API ključ za OpenWeatherMap kao environment variable.
 
-   ![Environment varijable](img/apykeyy.png)
+   ![Environment varijable](static/img/apykeyy.png)
 
 5. **Deploy aplikacije**  
    Deploy aplikacije (auto-deploy na svaki commit).
 
-   ![Deploy proces](img/deployanje.png)
+   ![Deploy proces](static/img/deployanje.png)
 
 6. **Provjera aplikacije na javnom URL-u**  
    Provjera da aplikacija radi na javnom URL-u:  
    [https://vremenska-prognoza.onrender.com](https://vremenska-prognoza.onrender.com)
 
-   ![Aplikacija live](img/pokrenutaaplikacija.png)
+   ![Aplikacija live](static/img/pokrenutaaplikacija.png)
 
 ---
 
@@ -104,12 +104,12 @@ bash run_docker.sh
 1. **Registracija domene**  
    Registrirana domena: **prognozaza.me**
 
-   ![Custom domena](img/domena.jpg)
+   ![Custom domena](static/img/domena.jpg)
 
 2. **Povezivanje domene sa Render aplikacijom**  
    Dodan CNAME/A zapis prema Render aplikaciji.
 
-   ![Custom domena](img/customdomena.jpg)
+   ![Custom domena](static/img/customdomena.jpg)
 
 ---
 
@@ -170,16 +170,16 @@ Kroz rad na ovom projektu naučili smo:
 ## 11. Slike ekrana aplikacije 
 
 - **Početna:**  
-  ![Slika aplikacije](img/pocetna.png)
+  ![Slika aplikacije](static/img/pocetna.png)
 
 - **Prikaz vremena:**  
-  ![Slika aplikacije](img/vrijeme.png)
+  ![Slika aplikacije](static/img/vrijeme.png)
 
 - **Dark mode:**  
-  ![Slika aplikacije](img/darkmode.png)
+  ![Slika aplikacije](static/img/darkmode.png)
 
 - **Light mode:**  
-  ![Slika aplikacije](img/lightmode.png)
+  ![Slika aplikacije](static/img/lightmode.png)
 
 ---
 
