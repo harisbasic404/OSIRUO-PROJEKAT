@@ -190,4 +190,26 @@ Kroz rad na ovom projektu naučili smo:
 
 ---
 
+### Napomena o sigurnosti API ključa
+
+U praksi, **API ključ nikada ne treba čuvati direktno u kodu** ili dijeliti javno (npr. na GitHub-u). Umjesto toga, koristi se `.env` datoteka i environment varijable. Postupak:
+
+1. Napravi `.env` datoteku u root folderu projekta:
+   ```
+   OPENWEATHER_API_KEY=ovdje_stavi_svoj_kljuc
+   ```
+2. Dodaj `.env` u `.gitignore` da se ne šalje na repozitorij.
+3. U kodu koristi biblioteku `python-dotenv`:
+   ```python
+   from dotenv import load_dotenv
+   load_dotenv()
+   import os
+   API_KEY = os.getenv("OPENWEATHER_API_KEY")
+   ```
+Ovaj način štiti tvoj ključ od zloupotrebe.
+
+**Napomena:** U ovom projektu API ključ je direktno u kodu jer ne planiram dijeliti repozitorij sa širom grupom ljudi. Za javne projekte ili timski rad, uvijek koristi environment varijable!
+
+---
+
 **Kraj dokumentacije**
