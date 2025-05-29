@@ -170,7 +170,7 @@ Kroz rad na ovom projektu naučili smo:
 ## 11. Slike ekrana aplikacije 
 
 - **Početna:**  
-  ![Slika aplikacije](static/img/pocetna.png)
+  ![Slika aplikacije](static/img/sladic.png)
 
 - **Prikaz vremena:**  
   ![Slika aplikacije](static/img/vrijeme.png)
