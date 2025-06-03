@@ -1,40 +1,61 @@
 <!DOCTYPE html>
-<html lang="hr">
+<html lang="hr"> <!-- Definiše jezik stranice kao hrvatski -->
 <head>
-    <meta charset="UTF-8">
-    <title>Vremenska prognoza</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <meta charset="UTF-8"> <!-- Postavlja encoding na UTF-8 radi podrške svih znakova -->
+    <title>Vremenska prognoza</title> <!-- Naslov stranice u tabu preglednika -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> <!-- Učitava vlastiti CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> <!-- Bootstrap ikone za vremenske simbole -->
 </head>
 <body id="main-body" data-weather-main="{% if weather %}{{ weather.weather[0].main|lower }}{% else %}default{% endif %}">
+    <!-- 
+        id="main-body" omogućava JS-u da lako pronađe body,
+        data-weather-main sadrži glavni tip vremena (npr. 'clear', 'rain') za dinamičku pozadinu
+    -->
     <button class="theme-toggle" onclick="toggleTheme()" title="Promijeni temu">
         <span id="theme-icon">🌙</span>
     </button>
+    <!-- Dugme za promjenu teme (svijetla/tamna), ikona se mijenja JS-om -->
+
     <button class="bg-toggle" id="bg-toggle" onclick="toggleBg()" title="Dinamična pozadina">
         <span id="bg-icon">🖼️</span>
     </button>
+    <!-- Dugme za uključivanje/isključivanje dinamične pozadine -->
+
     <div class="container">
         <div style="text-align:center; font-size:1.2rem; margin-bottom:12px; font-weight:600; color:#007bff;">
             Dobrodošli na projekat OSiRuO 2025!
         </div>
-        <h1>Vremenska prognoza</h1>
+        <!-- Pozdravna poruka na vrhu stranice -->
+
+        <h1>Vremenska prognoza</h1> <!-- Glavni naslov stranice -->
+
         <div id="current-datetime" style="text-align:center; margin-bottom: 20px; font-weight:600;"></div>
+        <!-- Prikaz trenutnog datuma i vremena, popunjava se JS-om -->
+
         <form method="post" class="weather-form">
             <input type="text" name="city" id="city-input" placeholder="Unesite grad" autocomplete="off" required>
+            <!-- Polje za unos grada, autocomplete isključeno, obavezno polje -->
             <div id="city-suggestions" class="suggestions"></div>
+            <!-- Div za prikaz prijedloga gradova (autocomplete) -->
             <button type="submit" class="btn btn-primary">Prikaži</button>
+            <!-- Dugme za slanje forme -->
             <button type="button" id="detect-location" class="btn btn-primary" style="margin-left:10px;" title="Koristi moju lokaciju">
                 <span style="font-size: 18px;">📍</span>
             </button>
+            <!-- Dugme za automatsko prepoznavanje lokacije korisnika -->
         </form>
+
         <div id="history" style="margin: 20px 0;"></div>
+        <!-- Div za prikaz historije pretraga (popunjava se JS-om) -->
 
         {% if weather %}
+            <!-- Prikazuje se samo ako postoje podaci o vremenu -->
             <div class="card mt-4">
                 <div class="card-body">
-                    <h2>{{ city }}</h2>
+                    <h2>{{ city }}</h2> <!-- Prikaz imena grada -->
                     <div class="weather-details">
                         <div>
+                            <!-- Prikaz osnovnih meteoroloških podataka -->
                             <p>🌡️ Temperatura: <strong>{{ weather.main.temp }}°C</strong></p>
                             <p>🤗 Osjećaj: <strong>{{ weather.main.feels_like }}°C</strong></p>
                             <p>🔻 Min: <strong>{{ weather.main.temp_min }}°C</strong> | 🔺 Max: <strong>{{ weather.main.temp_max }}°C</strong></p>
@@ -48,9 +69,10 @@
                             <p>📍 Koordinate: <strong>{{ weather.coord.lat }}, {{ weather.coord.lon }}</strong></p>
                         </div>
                         <div class="weather-icon">
-                            <!-- Dodaj default ikonu za fallback -->
+                            <!-- Prikaz glavne vremenske ikone, mijenja se JS-om prema tipu vremena -->
                             <i id="main-weather-icon" class="weather-forecast-icon bi bi-question-circle" style="font-size: 3rem;"></i>
                             <p style="text-transform: capitalize;">{{ weather.weather[0].description }}</p>
+                            <!-- Opis vremena (npr. 'umjereno oblačno') -->
                         </div>
                     </div>
                 </div>
@@ -58,16 +80,17 @@
         {% endif %}
 
         {% if forecast_hourly %}
+            <!-- Prikazuje se samo ako postoji satna prognoza -->
             <div class="forecast-section">
                 <h3>Prognoza na svaka 3 sata</h3>
                 <div class="forecast-grid">
                     {% for item in forecast_hourly %}
                         <div class="forecast-card">
-                            <div>{{ item.dt_txt[11:16] }}</div>
-                            <!-- Dodaj default ikonu za fallback -->
+                            <div>{{ item.dt_txt[11:16] }}</div> <!-- Vrijeme (HH:MM) -->
                             <i class="weather-forecast-icon bi bi-question-circle" id="forecast-icon-{{ loop.index }}" style="font-size:2rem;"></i>
-                            <div>{{ item.main.temp|round }}°C</div>
-                            <div style="font-size:12px;">{{ item.weather[0].description }}</div>
+                            <!-- Ikona vremena, mijenja se JS-om -->
+                            <div>{{ item.main.temp|round }}°C</div> <!-- Temperatura -->
+                            <div style="font-size:12px;">{{ item.weather[0].description }}</div> <!-- Opis vremena -->
                         </div>
                     {% endfor %}
                 </div>
@@ -75,36 +98,41 @@
         {% endif %}
 
         {% if forecast_daily %}
+            <!-- Prikazuje se samo ako postoji dnevna prognoza -->
             <div class="forecast-section">
                 <h3>Prognoza po danima</h3>
                 <div class="forecast-grid">
                     {% for item in forecast_daily %}
                         <div class="forecast-card">
                             <div><strong>{{ item.day_name }}</strong> <span style="font-size:12px;">({{ item.dt_txt[:10] }})</span></div>
-                            <!-- Dodaj default ikonu za fallback -->
+                            <!-- Naziv dana i datum -->
                             <i class="weather-forecast-icon bi bi-question-circle" id="forecast-icon-day-{{ loop.index }}" style="font-size:2rem;"></i>
-                            <div>{{ item.main.temp|round }}°C</div>
-                            <div style="font-size:12px;">{{ item.weather[0].description }}</div>
+                            <!-- Ikona vremena, mijenja se JS-om -->
+                            <div>{{ item.main.temp|round }}°C</div> <!-- Temperatura -->
+                            <div style="font-size:12px;">{{ item.weather[0].description }}</div> <!-- Opis vremena -->
                         </div>
                     {% endfor %}
                 </div>
             </div>
         {% endif %}
     </div>
+
     <div id="bih-img-map" style="position: relative; width: 520px; height: 520px; margin: 30px auto; border-radius: 18px; box-shadow: 0 2px 12px #0001;">
         <img src="{{ url_for('static', filename='img/bih-3d.png') }}" alt="Mapa BiH" style="width: 100%; height: 100%; border-radius: 18px; display: block;">
-     <!-- Gradovi: precizne pozicije na osnovu slike -->
-    <button onclick="selectCity('Bihać')" class="city-btn" style="left: 9%; top: 20%;">Bihać</button>
-    <button onclick="selectCity('Prijedor')" class="city-btn" style="left: 28%; top: 18%;">Prijedor</button>
-    <button onclick="selectCity('Banja Luka')" class="city-btn" style="left: 38%; top: 26%;">Banja Luka</button>
-    <button onclick="selectCity('Bijeljina')" class="city-btn" style="left: 88%; top: 18%;">Bijeljina</button>
-    <button onclick="selectCity('Tuzla')" class="city-btn" style="left: 77%; top: 34%;">Tuzla</button>
-    <button onclick="selectCity('Brčko')" class="city-btn" style="left: 77%; top: 25%;">Brčko</button>
-    <button onclick="selectCity('Zenica')" class="city-btn" style="left: 58%; top: 40%;">Zenica</button>
-    <button onclick="selectCity('Sarajevo')" class="city-btn" style="left: 68%; top: 55%;">Sarajevo</button>
-    <button onclick="selectCity('Mostar')" class="city-btn" style="left: 53%; top: 70%;">Mostar</button>
+        <!-- Slika mape BiH, služi kao podloga za dugmad gradova -->
+        <!-- Dugmad za gradove, klikom automatski popunjavaju polje za grad i šalju formu -->
+        <button onclick="selectCity('Bihać')" class="city-btn" style="left: 9%; top: 20%;">Bihać</button>
+        <button onclick="selectCity('Prijedor')" class="city-btn" style="left: 28%; top: 18%;">Prijedor</button>
+        <button onclick="selectCity('Banja Luka')" class="city-btn" style="left: 38%; top: 26%;">Banja Luka</button>
+        <button onclick="selectCity('Bijeljina')" class="city-btn" style="left: 88%; top: 18%;">Bijeljina</button>
+        <button onclick="selectCity('Tuzla')" class="city-btn" style="left: 77%; top: 34%;">Tuzla</button>
+        <button onclick="selectCity('Brčko')" class="city-btn" style="left: 77%; top: 25%;">Brčko</button>
+        <button onclick="selectCity('Zenica')" class="city-btn" style="left: 58%; top: 40%;">Zenica</button>
+        <button onclick="selectCity('Sarajevo')" class="city-btn" style="left: 68%; top: 55%;">Sarajevo</button>
+        <button onclick="selectCity('Mostar')" class="city-btn" style="left: 53%; top: 70%;">Mostar</button>
     </div>
-    <!-- Flash poruke -->
+
+    <!-- Flash poruke za prikaz grešaka ili obavijesti iz backend-a -->
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="flash-messages">
@@ -119,26 +147,26 @@
     // Mapiranje OpenWeatherMap icon code -> Bootstrap Icons klasa
     function getBootstrapIcon(iconCode) {
         const map = {
-            "01d": "bi-sun",
-            "01n": "bi-moon",
-            "02d": "bi-cloud-sun",
-            "02n": "bi-cloud-moon",
-            "03d": "bi-cloud",
+            "01d": "bi-sun",           // Vedro dan
+            "01n": "bi-moon",          // Vedro noć
+            "02d": "bi-cloud-sun",     // Malo oblaka dan
+            "02n": "bi-cloud-moon",    // Malo oblaka noć
+            "03d": "bi-cloud",         // Raspršeni oblaci
             "03n": "bi-cloud",
-            "04d": "bi-clouds",
+            "04d": "bi-clouds",        // Pretežno oblačno
             "04n": "bi-clouds",
-            "09d": "bi-cloud-drizzle",
+            "09d": "bi-cloud-drizzle", // Slaba kiša
             "09n": "bi-cloud-drizzle",
-            "10d": "bi-cloud-rain",
-            "10n": "bi-cloud-rain",
-            "11d": "bi-cloud-lightning",
-            "11n": "bi-cloud-lightning",
-            "13d": "bi-snow",
-            "13n": "bi-snow",
-            "50d": "bi-cloud-fog2",
-            "50n": "bi-cloud-fog2"
+            "10d": "bi-cloud-rain",    // Kiša dan
+            "10n": "bi-cloud-rain",    // Kiša noć
+            "11d": "bi-cloud-lightning", // Grmljavina dan
+            "11n": "bi-cloud-lightning", // Grmljavina noć
+            "13d": "bi-snow",          // Snijeg dan
+            "13n": "bi-snow",          // Snijeg noć
+            "50d": "bi-cloud-fog2",    // Magla dan
+            "50n": "bi-cloud-fog2"     // Magla noć
         };
-        return map[iconCode] || "bi-question-circle";
+        return map[iconCode] || "bi-question-circle"; // Fallback ako nema mape
     }
 
     // Prebaci podatke iz Jinja2 u JS varijable
@@ -147,7 +175,7 @@
     const forecastDaily = {{ forecast_daily|tojson|safe }};
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Glavna ikona
+        // Glavna ikona - postavi odgovarajuću klasu prema tipu vremena
         if (weatherData && weatherData.weather && weatherData.weather[0]) {
             var mainIcon = document.getElementById('main-weather-icon');
             if (mainIcon) {
@@ -156,7 +184,7 @@
             }
         }
 
-        // Prognoza po satima
+        // Prognoza po satima - postavi ikone za svaki sat
         if (forecastHourly && Array.isArray(forecastHourly)) {
             forecastHourly.forEach(function(item, idx) {
                 var el = document.getElementById('forecast-icon-' + (idx + 1));
@@ -166,7 +194,7 @@
             });
         }
 
-        // Prognoza po danima
+        // Prognoza po danima - postavi ikone za svaki dan
         if (forecastDaily && Array.isArray(forecastDaily)) {
             forecastDaily.forEach(function(item, idx) {
                 var el = document.getElementById('forecast-icon-day-' + (idx + 1));
@@ -177,9 +205,11 @@
         }
     });
     </script>
+
     <script>
     // Tema i pozadina
     function toggleTheme() {
+        // Prebacuje između svijetle i tamne teme, ovisno o dinamičnoj pozadini
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         const body = document.body;
         if (useDynamic) {
@@ -195,6 +225,7 @@
     }
 
     function updateThemeIcon() {
+        // Mijenja ikonu na dugmetu za temu prema trenutnoj temi
         const icon = document.getElementById('theme-icon');
         const btn = document.querySelector('.theme-toggle');
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
@@ -218,6 +249,7 @@
     }
 
     function toggleBg() {
+        // Uključuje/isključuje dinamičnu pozadinu
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         localStorage.setItem('dynamicBg', useDynamic ? 'false' : 'true');
         applyTheme();
@@ -226,6 +258,7 @@
     }
 
     function setDynamicBgClass() {
+        // Postavlja CSS klasu na body prema tipu vremena za dinamičnu pozadinu
         const body = document.body;
         if (localStorage.getItem('dynamicBg') === 'false') return;
         body.className = body.className.replace(/\bweather-\w+\b/g, '').trim();
@@ -235,6 +268,7 @@
     }
 
     function updateBg() {
+        // Ažurira pozadinu prema postavci dinamične pozadine
         const body = document.body;
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         if (!useDynamic) {
@@ -251,12 +285,14 @@
     }
 
     function updateBgIcon() {
+        // Mijenja ikonu na dugmetu za pozadinu prema postavci
         const icon = document.getElementById('bg-icon');
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         icon.textContent = useDynamic ? "🖼️" : "⬛";
     }
 
     function applyTheme() {
+        // Primjenjuje temu i pozadinu na osnovu lokalnih postavki
         const useDynamic = localStorage.getItem('dynamicBg') !== 'false';
         const theme = localStorage.getItem('theme') || 'light';
         const body = document.body;
@@ -274,8 +310,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
+        // Inicijalizacija teme i pozadine pri učitavanju stranice
         if (localStorage.getItem('dynamicBg') === null) {
-            localStorage.setItem('dynamicBg', 'true'); // <-- promijeni na 'true'
+            localStorage.setItem('dynamicBg', 'true'); // Podrazumijevano dinamična pozadina
         }
         if (localStorage.getItem('theme') === null) {
             localStorage.setItem('theme', 'light');
@@ -286,7 +323,7 @@
         // ...ostala inicijalizacija...
     });
 
-    // Prikaz trenutnog datuma i vremena
+    // Prikaz trenutnog datuma i vremena, ažurira se svake sekunde
     function updateDateTime() {
         const now = new Date();
         const dani = ["Nedjelja", "Ponedjeljak", "Utorak", "Srijeda", "Četvrtak", "Petak", "Subota"];
@@ -294,10 +331,10 @@
         const tekst = `${dani[now.getDay()]}, ${now.getDate()}. ${mjeseci[now.getMonth()]} ${now.getFullYear()}. ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
         document.getElementById('current-datetime').textContent = tekst;
     }
-    setInterval(updateDateTime, 1000);
-    updateDateTime();
+    setInterval(updateDateTime, 1000); // Ažurira svake sekunde
+    updateDateTime(); // Poziva odmah pri učitavanju
 
-    // Povijest pretraga
+    // Povijest pretraga - prikazuje zadnjih 5 pretraženih gradova
     const form = document.querySelector('.weather-form');
     const historyDiv = document.getElementById('history');
     function renderHistory() {
@@ -327,7 +364,7 @@
     }
     document.addEventListener('DOMContentLoaded', renderHistory);
 
-    // Automatsko prepoznavanje lokacije
+    // Automatsko prepoznavanje lokacije korisnika
     document.getElementById('detect-location').onclick = function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(pos) {
@@ -352,7 +389,7 @@
         }
     };
 
-    // Funkcija za izbor grada sa mape
+    // Funkcija za izbor grada sa mape (dugmad na slici)
     function selectCity(cityName) {
         const input = document.getElementById('city-input');
         if (input) {
@@ -361,7 +398,7 @@
         }
     }
 
-    // Autocomplete za gradove
+    // Autocomplete za gradove - prikazuje prijedloge dok korisnik piše
     const cityInput = document.getElementById('city-input');
     const suggestionsDiv = document.getElementById('city-suggestions');
 
@@ -401,7 +438,9 @@
         }
     });
     </script>
+
     <style>
+    /* Stil za vremenske ikone u tamnoj/tamnoj-no-bg temi */
     body.text-dark .weather-forecast-icon,
     body.text-dark #main-weather-icon,
     body.dark-no-bg .weather-forecast-icon,
